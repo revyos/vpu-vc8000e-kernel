@@ -32,7 +32,7 @@ ifeq ($(JOBS),)
 endif
 
 all:    info driver install_local_output
-.PHONY: info driver install_local_output install_prepare clean_driver clean_output clean
+.PHONY: info driver install_local_output install_addons install_prepare clean_driver clean_output clean
 
 info:
 	@echo $(BUILD_LOG_START)
@@ -65,7 +65,12 @@ clean_driver:
 install_prepare:
 	mkdir -p ./output/rootfs/$(DIR_TARGET_KO)
 
-install_local_output: install_prepare driver
+install_addons: install_prepare
+	@if [ -d addons/ko ]; then                                 \
+	    cp -rf addons/ko/* ./output/rootfs/$(DIR_TARGET_KO); \
+	fi
+
+install_local_output: install_addons install_prepare driver
 	@echo $(BUILD_LOG_START)
 	find ./linux -name "*.ko" | xargs -i cp -f {} ./output/rootfs/$(DIR_TARGET_KO)
 	cp -f ./linux/kernel_module/driver_load.sh ./output/rootfs/$(DIR_TARGET_KO)
