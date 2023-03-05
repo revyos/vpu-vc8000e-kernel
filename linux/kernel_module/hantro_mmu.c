@@ -1180,11 +1180,12 @@ enum MMUStatus MMUCleanup(volatile unsigned char *hwregs[MAX_SUBSYS_NUM][2]) {
     if (g_mmu->page_table_array)
       iounmap(g_mmu->page_table_array);
   } else {
-    if (g_mmu->stlb_virtual)
-      dma_free_coherent(&platformdev->dev, g_mmu->stlb_size,
-		        g_mmu->stlb_virtual, (dma_addr_t)g_mmu->stlb_physical);
+	/* stlb_virtual is same alloc on alloc mtlb_virtual in func MMUEnable()
+	 * so, should not free g_mmu->stlb_virtual.But free handle g_mmu->mtlb_physical
+	 * size should be  ( g_mmu->mtlb_size+g_mmu->stlb_size) 
+	 * */
     if (g_mmu->mtlb_virtual)
-      dma_free_coherent(&platformdev->dev, g_mmu->mtlb_size,
+      dma_free_coherent(&platformdev->dev, g_mmu->mtlb_size+g_mmu->stlb_size,
                         g_mmu->mtlb_virtual, (dma_addr_t)g_mmu->mtlb_physical);
     if (g_mmu->page_table_array)
       dma_free_coherent(&platformdev->dev, g_mmu->page_table_array_size,
