@@ -67,7 +67,6 @@
 #include <linux/device.h>
 #include <linux/pagemap.h>
 #include <linux/sched.h>
-#include <stddef.h>
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
 #include <linux/dma-map-ops.h>
 #else
@@ -1062,6 +1061,11 @@ enum MMUStatus MMUInit(volatile unsigned char *hwregs) {
     status = MMU_STATUS_FALSE;
     goto onerror;
   } else {
+  #if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+    platformdev->dev.dma_coherent = 0; //For this device dma alloc coherent mem
+  #endif
     pr_info("Create platform device success\n");
   }
 

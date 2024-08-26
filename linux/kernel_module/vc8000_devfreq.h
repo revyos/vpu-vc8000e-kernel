@@ -9,13 +9,20 @@ struct opp_table;
 struct encoder_devfreq {
 	int busy_count;
     struct devfreq *df;
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 0, 0)
     struct opp_table *clkname_opp_table;
+#else
+	int token;
+#endif
 	bool opp_of_table_added;
 	bool update_freq_flag;
 	unsigned long next_target_freq;
 	unsigned long cur_devfreq;
 	unsigned long max_freq;
 	wait_queue_head_t target_freq_wait_queue;
+#ifdef CONFIG_TH1520_SYSTEM_MONITOR
+	struct monitor_dev_info *mdev_info;
+#endif
 
 	ktime_t busy_time;
 	ktime_t idle_time;

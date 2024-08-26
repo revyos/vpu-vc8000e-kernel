@@ -71,7 +71,6 @@
 #include <linux/platform_device.h>
 #include <linux/dma-buf.h>
 
-#include <stddef.h>
 #include "vc8000_axife.h"
 /* mode description
  * 1: OYB normal(enable)

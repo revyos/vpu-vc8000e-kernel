@@ -1025,6 +1025,7 @@ static struct file_operations hantroenc_fops = {
 
 static const struct of_device_id isp_of_match[] = {
         { .compatible = "thead,light-vc8000e",  },
+        { .compatible = "xuantie,th1520-vc8000e",  },
         { /* sentinel */  },
 };
 
